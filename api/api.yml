@@ -5,10 +5,18 @@ info:
   description: API to manage and calculate optimal pack sizes
 
 servers:
-  - url: https://{hostname}/api
+  - url: /api
+    description: Relative API URL (uses current protocol)
+  - url: http://{hostname}/api
     variables:
       hostname:
         default: localhost:8080
+    description: HTTP endpoint
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8443
+    description: HTTPS endpoint
 
 paths:
   /health:

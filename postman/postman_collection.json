@@ -1,0 +1,221 @@
+{
+	"info": {
+		"_postman_id": "4ff9db48-57a4-4882-8c1f-b05e955318f8",
+		"name": "smart-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23422180"
+	},
+	"item": [
+		{
+			"name": "pack-sizes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/pack-sizes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"pack-sizes"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/pack-sizes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"pack-sizes"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, no-transform, must-revalidate, private, max-age=0"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Expires",
+							"value": "Thu, 01 Jan 1970 01:00:00 CET"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "X-Accel-Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "deny"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 04 Aug 2025 00:52:42 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "40"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"pack_sizes\": [\n        5000,\n        2000,\n        1000,\n        500,\n        250\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "calculate-item-ordered",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"items_ordered\": 12444\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/calculate",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"calculate"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "calculate-item-ordered",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"items_ordered\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/calculate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"calculate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, no-transform, must-revalidate, private, max-age=0"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Expires",
+							"value": "Thu, 01 Jan 1970 01:00:00 CET"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "X-Accel-Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "deny"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 04 Aug 2025 00:54:38 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "116"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"items_ordered\": 10,\n    \"pack_details\": [\n        {\n            \"quantity\": 1,\n            \"size\": 250\n        }\n    ],\n    \"packs\": {\n        \"250\": 1\n    },\n    \"total_items\": 250,\n    \"total_packs\": 1\n}"
+				}
+			]
+		},
+		{
+			"name": "set-pack-size",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"pack_sizes\": [100, 300, 500]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/pack-sizes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"pack-sizes"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

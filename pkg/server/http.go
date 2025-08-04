@@ -73,6 +73,11 @@ func GetRootRouter(
 
 	rootRouter := chi.NewRouter()
 
+	// Serve Swagger UI
+	rootRouter.HandleFunc("/docs", ServeSwaggerUI)
+	rootRouter.HandleFunc("/docs/", ServeSwaggerUI)
+
+	// Serve Swagger JSON
 	rootRouter.Get(refineSwaggerPath(swaggerPath), Swagger)
 
 	if apiHandler != nil {
@@ -145,4 +150,39 @@ func Swagger(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
+}
+
+func ServeSwaggerUI(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	if _, err := w.Write([]byte(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Smart Pack API Documentation</title>
+        <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@4.5.0/swagger-ui.css">
+    </head>
+    <body>
+        <div id="swagger-ui"></div>
+        <script src="https://unpkg.com/swagger-ui-dist@4.5.0/swagger-ui-bundle.js"></script>
+        <script>
+            window.onload = function() {
+                window.ui = SwaggerUIBundle({
+                    url: window.location.protocol + "//" + window.location.host + "/api/v1/api-docs/swagger.json",
+                    dom_id: '#swagger-ui',
+                    deepLinking: true,
+                    presets: [
+                        SwaggerUIBundle.presets.apis,
+                        SwaggerUIBundle.SwaggerUIStandalonePreset
+                    ],
+                    layout: "BaseLayout"
+                });
+            };
+        </script>
+    </body>
+    </html>
+    `)); err != nil {
+		logrus.WithContext(r.Context()).WithError(err).Error("failed to write Swagger UI response")
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
 }
