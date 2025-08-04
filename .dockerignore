@@ -1,0 +1,17 @@
+# Development
+.git
+.env
+.idea
+.vscode
+
+# Go specific
+*.exe
+*.test
+*.out
+
+# Docker
+Dockerfile
+docker-compose*
+
+# OS specific
+.DS_Store

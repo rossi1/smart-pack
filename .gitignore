@@ -1,0 +1,14 @@
+vendor/
+!functions/jira_sync/vendor
+bin/
+
+.DS_Store
+.vscode
+www/dist/
+www/.DS_Store
+www/node_modules
+npm-debug.log
+.data
+.idea/
+coverage.txt
+codecov.out

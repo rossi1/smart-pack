@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: smartpack-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: smartpack
+      POSTGRES_PASSWORD: smartpack
+      POSTGRES_DB: smartpack
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - smartpack
+    ports:
+      - "5432:5432"
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smartpack-api
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://smartpack:smartpack@db:5432/smartpack?sslmode=disable
+    entrypoint: ["./docker-entrypoint.sh", "api"]
+    networks:
+      - smartpack
+    ports:
+      - "8080:8080"
+
+volumes:
+  db_data:
+
+networks:
+  smartpack:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: smartpack
+      

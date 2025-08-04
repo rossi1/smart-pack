@@ -1,0 +1,6 @@
+package: ports
+generate:
+    chi-server: true
+    client: true
+    models: true
+output: ports/openapi_http.gen.go

@@ -1,0 +1,212 @@
+openapi: 3.0.3
+info:
+  title: SmartPack API
+  version: 1.0.0
+  description: API to manage and calculate optimal pack sizes
+
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+
+paths:
+  /health:
+    get:
+      tags:
+        - health
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Service is healthy
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+  /pack-sizes:
+    get:
+      tags:
+        - pack-configuration
+      operationId: getPackSizes
+      responses:
+        '200':
+          description: Returns current pack sizes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackSizesResponse'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+    post:
+      tags:
+        - pack-configuration
+      operationId: setPackSizes
+      requestBody:
+        description: Array of pack sizes to set (overwrites existing)
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetPackSizesRequest'
+            example:
+              pack_sizes:
+                - 250
+                - 500
+                - 1000
+      responses:
+        '200':
+          description: Pack sizes updated successfully
+        '400':
+          description: Bad request  
+        '500':
+          description: Internal server error
+
+  /calculate:
+    post:
+      tags:
+        - pack-calculation
+      operationId: calculatePacks
+      requestBody:
+        description: Number of items ordered to calculate optimal pack distribution for
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculateRequest'
+            example:
+              items_ordered: 12001
+      responses:
+        '200':
+          description: Successful pack calculation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackSolution'
+              examples:
+                example1:
+                  value:
+                    items_ordered: 12001
+                    total_items: 12250
+                    total_packs: 4
+                    packs:
+                      "5000": 2
+                      "2000": 1
+                      "250": 1
+                    pack_details:
+                      - size: 5000
+                        quantity: 2
+                      - size: 2000
+                        quantity: 1
+                      - size: 250
+                        quantity: 1
+        '400':
+          description: Bad request
+        '405':
+          description: Method not allowed
+        '422':
+          description: Cannot fulfill quantity with available pack sizes
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: healthy
+
+    PackSizesResponse:
+      type: object
+      required:
+        - pack_sizes
+      properties:
+        pack_sizes:
+          type: array
+          items:
+            type: integer
+          example: [250, 500, 1000, 2000, 5000]
+
+    SetPackSizesRequest:
+      type: object
+      required:
+        - pack_sizes
+      properties:
+        pack_sizes:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+            maximum: 1000000
+            description: Pack size (must be positive integer ≤ 1,000,000)
+          minItems: 1
+          maxItems: 50
+          uniqueItems: true
+          example: [250, 500, 1000]
+          
+    CalculateRequest:
+      type: object
+      required:
+        - items_ordered
+      properties:
+        items_ordered:
+          type: integer
+          example: 12001
+
+    PackSolution:
+      type: object
+      required:
+        - items_ordered
+        - total_items
+        - total_packs
+        - packs
+        - pack_details
+      properties:
+        items_ordered:
+          type: integer
+          example: 12001
+        total_items:
+          type: integer
+          example: 12250
+        total_packs:
+          type: integer
+          example: 4
+        packs:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            "5000": 2
+            "2000": 1
+            "250": 1
+        pack_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackDetail'
+          example:
+            - size: 5000
+              quantity: 2
+            - size: 2000
+              quantity: 1
+            - size: 250
+              quantity: 1
+
+    PackDetail:
+      type: object
+      required:
+        - size
+        - quantity
+      properties:
+        size:
+          type: integer
+          example: 5000
+        quantity:
+          type: integer
+          example: 2
